@@ -73,6 +73,7 @@ class engine(window.window_handler):
             #self.update_display()
 
             self.function()
+            self.update_display()
 
             self.clock.tick(self.FPS)
             #self.clock.tick( )
@@ -84,19 +85,19 @@ class engine(window.window_handler):
 
 
     def STARTGAME(self):
-        #self.GAME = game(self)
-        #self.GUI = []
+        self.GAME = game(self)
+        self.reset_GUI()
         #self.GUI = self.GAME.game_gui()
 
-        pattern_conn, child_conn = Pipe()
-        p = Process(target=self.GAME.game_loop, args =(child_conn,) )
+        #pattern_conn, child_conn = Pipe()
+        #p = Process(target=self.GAME.game_loop, args =(child_conn,) )
         #p.start()
         #p.join()
         #self.function = self.drawGame
         #threading.Thread(target=self.GAME.game_loop).start()
         #threading.Thread(target=self.drawloop).start()
 
-        #self.function = self.geamloap
+        self.function = self.geamloap
 
     def geamloap(self):
         self.GAME.game_step()

@@ -44,7 +44,7 @@ def CharSelect(PROGRAM):
 
 
 
-def SGuiTest(PROGRAM): 
+def SGuiTest(PROGRAM):
     PROGRAM.reset_GUI()
 
     gui = []
@@ -61,13 +61,13 @@ def SGuiTest(PROGRAM):
             #gy = y + l
             #s = string + string * (y // l)
             s = string + string * y
-            
+
             r = y % l
            # s += string[0:r]
             buttons.append(m.button(surf,(.165,.095),(.05 + .17*x,.05 + .1*y),s,[ONETIME,PROGRAM.load_GUI,SMainMenu]))
-    
+
             #gui.append(m.button(surf,PSurf((100 + x*4 ,50 + x*2)),(100*x+x^2*4,50*y+y*2*x+y),s,[ONETIME,SMainMenu]))
     menu_bar.add_widgets(buttons)
     gui.append(menu_bar)
     PROGRAM.GUI = gui
-        
+

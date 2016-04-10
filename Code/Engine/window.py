@@ -50,6 +50,7 @@ class window_handler():
         #self.surf_GUI.set_colorkey((255,255,255))
         #self.surf_GAME.set_colorkey((255,255,255))
         self.surf_EFFECT.set_colorkey((0,0,0))
+        self.surf_GUI.set_colorkey((0,0,0))
         #self.surf_BGR.set_colorkey((255,255,255))
 
         #self.surfaces = {}
@@ -71,7 +72,9 @@ class window_handler():
         #self.MainWindow.blit(self.surf_GUI,(0,0))
         #self.surf_GUI.set_colorkey((0,0,0))
 
-        #self.surf_GUI = pygame.Surface((self.SWIDTH, self.SHEIGTH))
+        self.surf_GUI = pygame.Surface((self.w, self.h) ) #reset gui
+        self.surf_GUI.set_colorkey((0,0,0))
+
         self.GUI = []
         self.active_text_field = None
         #pygame.display.flip()
@@ -83,6 +86,7 @@ class window_handler():
         self.GUI_template = GUI
 
         self.refresh_GUI()
+        self.MainWindow.blit(self.surf_GUI, self.gamepos )
         pygame.display.flip()
 
     def adjust_GUI(self):
@@ -119,9 +123,7 @@ class window_handler():
 
 
     def update_display(self):
-        print("there is ",len(self.updates) )
-        print(self.updates)
-        flip = False
+        """flip = False
         if self.needs_resize:
             if pygame.time.get_ticks() - self.last_resie_request > 50:
                 self.update_resolution()
@@ -139,7 +141,11 @@ class window_handler():
         if not upd == [] and not flip:
             pygame.display.update(upd)
         elif flip:
-            pygame.display.flip()
+            pygame.display.flip()"""
+        #self.MainWindow.blit(self.surf_GUI, self.gamepos )
+
+        pygame.display.flip()
+
 
     def drawloop(self):
         while( not self.done ):
@@ -199,9 +205,6 @@ class window_handler():
 
         #pygame.draw.rect( self.MainWindow, (0,255,0), self.GAME.AREA.rect, 1 )
         #pygame.display.update(upd)
+
         self.MainWindow.blit(self.surf_GAME, self.gamepos, self.GAME.AREA )
         self.MainWindow.blit(self.surf_EFFECT, self.gamepos, self.GAME.AREA )
-
-        pygame.display.flip()
-
-
