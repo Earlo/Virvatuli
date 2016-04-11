@@ -36,9 +36,9 @@ class window_handler():
         #self.surf_EFFECT = pygame.Surface((self.w, self.h), pygame.HWSURFACE | pygame.DOUBLEBUF) #s.convert() #GAME surface
         #self.surf_VOID = pygame.Surface((self.w, self.h), pygame.HWSURFACE) #VOID surfaces
 
-        self.surf_GUI = pygame.Surface((self.w, self.h) ) #GUI surface
-        self.surf_GAME = pygame.Surface((self.w, self.h) ) #GAME surface
-        self.surf_EFFECT = pygame.Surface((self.w, self.h) ) #GAME surface
+        self.surf_GUI = pygame.Surface((self.w, self.h), pygame.HWSURFACE ) #GUI surface
+        self.surf_GAME = pygame.Surface((self.w, self.h), pygame.HWSURFACE ) #GAME surface
+        self.surf_EFFECT = pygame.Surface((self.w, self.h), pygame.HWSURFACE ) #GAME surface
 
 
         #self.MainWindow.blit(self.surf_GUI,(0,0))
@@ -190,13 +190,16 @@ class window_handler():
 
         #works
         for e in self.GAME.effects:
-            self.surf_GAME.blit( e.surf(), e )
+            #print( e.CURRENTSURFACE._pixels_address )
+            #self.surf_GAME.blit( e.surf(), e )
+            self.surf_GAME.blit( e.CURRENTSURFACE, e )
         for u in self.GAME.units:
-            self.surf_GAME.blit( u.surf(), u )
+            self.surf_GAME.blit( u.CURRENTSURFACE, u )
+            #self.surf_GAME.blit( u.surf(), u )
             #pygame.draw.rect(self.surf_GAME, (255,125,125), u.hitbox, 1)
 
         for a in self.GAME.ammo:
-            self.surf_GAME.blit( a.surf(), a )
+            self.surf_GAME.blit( a.CURRENTSURFACE, a )
             #pygame.draw.rect(self.surf_GAME, (255,125,125), a.hitbox, 1)
 
 

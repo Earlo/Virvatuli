@@ -18,12 +18,11 @@ class graphicalAssetHandler(dict):
         for root, dirs, files in os.walk( os.path.join( fpath,"sprites") ):
             for file in files:
                 if file.endswith(".png"):
-                    path = os.path.join( fpath,"sprites", file)
                     name = file.split(os.path.sep)[-1].split(".")[0]
-                    i = pygame.image.load( path ).convert()
-                    #get the smallest image that has all the significatn pixels
-                    i.set_colorkey(i.get_at((0, 0)))
-                    i = i.subsurface( i.get_bounding_rect() ).convert()
+                    i = pygame.image.load( os.path.join( fpath,"sprites", file) ).convert()
+
+                    i.set_colorkey(i.get_at((0, 0)), pygame.RLEACCEL)
+                    #i = i.subsurface( i.get_bounding_rect() ).convert()
                     #i.set_colorkey( )
 
                     self["SPRITE"][name] = i
@@ -37,7 +36,7 @@ class graphicalAssetHandler(dict):
 
                     #get the smallest image that has all the significatn pixels
                     i.set_colorkey(i.get_at((0, 0)))
-                    i = i.subsurface( i.get_bounding_rect() ).convert()
+                    #i = i.subsurface( i.get_bounding_rect() ).convert()
 
                     self["PORTRAIT"][name] = i
 
@@ -49,3 +48,9 @@ class graphicalAssetHandler(dict):
                     i = pygame.image.load( path ).convert()
                     #i.set_colorkey(i.get_at((0, 0)))
                     self["BGR"][name] = i
+
+#class entiesBySprite():
+#    def __init__(self):
+#        #super().__init__()
+#        self.d = {}
+#    def add(self,sprite, e)

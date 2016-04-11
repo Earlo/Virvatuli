@@ -16,7 +16,7 @@ class effect(entity.entity):
         if not f == self.frame:
             if (f > 0 ):
                 self.frame = f
-                self.sprite = self.sprites[self.frame]
+                self.changeSprite( self.frame )
             else:
                 self.done = True
         if (self.done):

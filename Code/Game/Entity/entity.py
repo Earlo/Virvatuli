@@ -16,6 +16,9 @@ IDHANDLE = IDhandle()
 
 class entity( pygame.Rect ):
     def __init__(self, GAME, pos, time ):
+
+        #super().__init__( (0,0), (0,0) )
+
         #print("created entity ",self, " at ", pygame.time.get_ticks())
         self.GAME = GAME
         self.frame = 0
@@ -31,23 +34,28 @@ class entity( pygame.Rect ):
         #    self.sprite = placeholder
         #    self.sprites = [placeholder]
         #else:
-        self.sprite = self.sprites[0]
+        #self.sprite = self.sprites[0]
 
-        #super().__init__( pos, self.surf().get_size() )
-        super().__init__( (0,0), self.surf().get_size() )
+        self.changeSprite( 0 )
+
+        super().__init__( pos, self.surf().get_size() )
+
         self.center = pos
         self.floatpos = pos
-        #self.rect = self.surf().get_rect()
 
-        #self.vec = [0,0]
         self.speed = 0
         self.change = self.speed * self.timeInterval
 
     def __eq__(self, other):
         return other != None and self.ID == other.ID
 
+    def changeSprite(self, i):
+        self.sprite = self.sprites[i]
+        self.CURRENTSURFACE = self.GAME.PROGRAM.GHandle[self.imagetype][ self.sprite ]
+        #self.size = self.CURRENTSURFACE.get_size
+
     def surf(self):
-        return self.GAME.PROGRAM.GHandle[self.imagetype][ self.sprite ]
+        return self.CURRENTSURFACE
 
     def drawableRect(self):
         return self.GAME.AREA.clip( self )

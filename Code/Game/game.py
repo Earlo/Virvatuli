@@ -23,6 +23,7 @@ class game():
         self.units = []
         self.ammo = []
         self.effects = []
+
         if save == None:
             self.start_game()
 
@@ -36,6 +37,7 @@ class game():
             u.update()
         for a in self.ammo:
             a.update()
+
         #t = pygame.time.get_ticks()
         #print( t - last )
 
