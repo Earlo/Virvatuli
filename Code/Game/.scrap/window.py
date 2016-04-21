@@ -146,12 +146,49 @@ class window_handler():
 
         pygame.display.flip()
 
+
+    def drawloop(self):
+        while( not self.done ):
+            self.drawGame()
+
+            #self.clock.tick(self.FPS)
+            #self.clock.tick( )
+            #try:
+            #    pygame.display.set_caption("FPS: %i" % self.clock.get_fps())
+            #except OverflowError:
+            #    pygame.display.set_caption("FPS: Quite a lot")
+
     def drawGame(self):
 
         self.surf_GAME.blit( self.GAME.AREA.surf(), (0, self.GAME.AREA.scroll) )
         if (not self.GAME.AREA.oldsprite == ""):
             self.surf_GAME.blit( self.GAME.AREA.oldsurf(), (0, self.GAME.AREA.oldscroll) )
 
+
+        """
+        for line in self.GAME.AREA.grid:
+            for tile in line:
+                #ents = set()
+                #for e in tile:
+                    #ents.add(e)
+                #self.surf_EFFECT.blit( e.surf(), e.upleftPos(), e.rect )
+
+                if (len(tile) > 0):
+                    import math
+                    a = 255/math.sqrt(len(tile))
+                    c = ( a,a,len(tile)*10 )
+                else:
+                    c = (1,0,0)
+                try:
+                    pygame.draw.rect(self.surf_EFFECT, c, tile.rect, 1)
+                except TypeError:
+                #    print( len(tile), tile.pos )
+                #    print( tile )
+                    pygame.draw.rect(self.surf_EFFECT, (0,255,255), tile.rect, 1)
+                    self.surf_GAME.blit( e.surf(), e.upleftPos(), e.rect)
+        #"""
+
+        #works
         for e in self.GAME.effects:
             #print( e.CURRENTSURFACE._pixels_address )
             #self.surf_GAME.blit( e.surf(), e )
@@ -174,24 +211,3 @@ class window_handler():
 
         self.MainWindow.blit(self.surf_GAME, self.gamepos, self.GAME.AREA )
         self.MainWindow.blit(self.surf_EFFECT, self.gamepos, self.GAME.AREA )
-
-    def EXPdrawGame(self, drawD):
-
-        for key in ["BGR","SPRITE","PORTRAIT"]:
-            for spr, poss in drawD[key].items():
-                s = self.GHandle[key][spr]
-                for pos in poss:
-                    self.surf_GAME.blit( s, pos )
-
-
-
-
-        #pygame.draw.circle( self.surf_EFFECT, (0,255,0), [int(i) for i in self.GAME.char.upleftPos()] , 3 )
-        #pygame.draw.circle( self.surf_EFFECT, (0,255,0), [int(i) for i in self.GAME.char.botrightPos()] , 3 )
-
-        #pygame.draw.rect( self.MainWindow, (0,255,0), self.GAME.AREA.rect, 1 )
-        #pygame.display.update(upd)
-
-        self.MainWindow.blit(self.surf_GAME, self.gamepos, self.GAME.AREA )
-        self.MainWindow.blit(self.surf_EFFECT, self.gamepos, self.GAME.AREA )
-

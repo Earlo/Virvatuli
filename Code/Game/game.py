@@ -17,20 +17,72 @@ from .. import constants
 def startGame( conn ):
     GAME = game()
 class game():
-    def __init__(self,PROGRAM, save = None):
+    def __init__(self, PROGRAM,save = None):
         self.PROGRAM = PROGRAM
-
+        self.done = False
         self.units = []
         self.ammo = []
         self.effects = []
 
-        if save == None:
-            self.start_game()
+        #if save == None:
+        self.start_game()
+
+
+    def EXPgame_step(self):
+        #last = pygame.time.get_ticks()
+        ret = dict()
+
+        self.AREA.update()
+        self.stage.update()
+        ret["BGR"] = dict()
+        ret["SPRITE"] = dict()
+        ret["PORTRAIT"] = dict()
+
+        ret["BGR"][self.AREA.sprite] =  [(0, self.AREA.scroll)]
+        if (not self.AREA.oldsprite == ""):
+            try:
+                ret["BGR"][self.AREA.oldsprite].append( (0, self.AREA.oldscroll) )
+            except KeyError:
+                ret["BGR"][self.AREA.oldsprite] =  [(0, self.AREA.oldscroll)]
+
+
+        for e in self.effects:
+            e.update()
+            try:
+                ret[e.imagetype][e.sprite].append( e.topleft )
+            except KeyError:
+                ret[e.imagetype][e.sprite] = [ e.topleft ]
+        for u in self.units:
+            u.update()
+            try:
+                ret[u.imagetype][u.sprite].append( u.topleft )
+            except KeyError:
+                ret[u.imagetype][u.sprite] = [ u.topleft ]
+        for a in self.ammo:
+            a.update()
+            try:
+                ret[a.imagetype][a.sprite].append( a.topleft )
+            except KeyError:
+                ret[a.imagetype][a.sprite] = [ a.topleft ]
+
+        return ret
+        #t = pygame.time.get_ticks()
+        #print( t - last )
+
 
     def game_step(self):
         #last = pygame.time.get_ticks()
+        ret = dict()
+
         self.AREA.update()
         self.stage.update()
+
+        ret[self.AREA.sprite] =  (0, self.GAME.AREA.scroll)
+        if (not self.AREA.oldsprite == ""):
+            ret[self.AREA.sprite] =  (0, self.GAME.AREA.scroll)
+            self.surf_GAME.blit( self.GAME.AREA.oldsurf(), (0, self.GAME.AREA.oldscroll) )
+
+
         for e in self.effects:
             e.update()
         for u in self.units:
@@ -43,7 +95,8 @@ class game():
 
     def game_loop(self):
         #last = 0
-        while not self.PROGRAM.done:
+        #while not self.PROGRAM.done:
+        while not self.done:
             self.AREA.update()
             self.stage.update()
             for e in self.effects:
@@ -88,6 +141,8 @@ class gameArea( pygame.Rect ):
         self.oldsprite = ""
 
         self.grid = grid.grid( self.size, 32 )
+
+        #self.scroll = 0
         self.scroll = +self.h-self.surf().get_height()
 
     def oldsurf(self):

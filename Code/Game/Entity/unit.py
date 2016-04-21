@@ -38,6 +38,7 @@ class unit(entity.entity):
         self.GAME.AREA.grid.add(self)
 
     def collision(self): #really shit code, but will do
+        #pass
         for t in self.tiles:
             for i in t:
                 if i.FLAGS["TANGIBLE"]:

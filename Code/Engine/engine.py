@@ -100,8 +100,9 @@ class engine(window.window_handler):
         self.function = self.geamloap
 
     def geamloap(self):
-        self.GAME.game_step()
-        self.drawGame()
+        #self.GAME.game_step()
+        #self.drawGame()
+        self.EXPdrawGame( self.GAME.EXPgame_step() )
 
     def OTfunction_wrapper(self,e):
         e.func( *e.param )

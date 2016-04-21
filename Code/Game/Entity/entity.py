@@ -52,7 +52,6 @@ class entity( pygame.Rect ):
     def changeSprite(self, i):
         self.sprite = self.sprites[i]
         self.CURRENTSURFACE = self.GAME.PROGRAM.GHandle[self.imagetype][ self.sprite ]
-        #self.size = self.CURRENTSURFACE.get_size
 
     def surf(self):
         return self.CURRENTSURFACE
