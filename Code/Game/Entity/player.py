@@ -1,5 +1,5 @@
 
-import pygame
+#import pygame
 from pygame.locals import *
 
 from . import pattern
@@ -10,7 +10,7 @@ class player(pattern.pattern):
         super().__init__(owner)
 
     def iterate(self):
-        keys = pygame.key.get_pressed()
+        keys = self.owner.GAME.keys
         dx,dy = 0,0
         self.owner.change = self.owner.speed * self.owner.timeInterval
 

@@ -8,6 +8,7 @@ import threading
 #!TEST
 #from multiprocessing import Process
 from multiprocessing import Process, Pipe
+#from multiprocessing import Process, Queue
 
 import pygame
 from pygame.locals import *
@@ -15,7 +16,7 @@ from pygame.locals import *
 from . import window
 from . import localization
 
-from ..Game.game import game
+from ..Game.game import startGame
 
 from ..constants import *
 
@@ -28,6 +29,8 @@ class engine(window.window_handler):
         self.mouse = [pygame.mouse.get_pos() , False ,  [0,0] , None ]
         self.clock = pygame.time.Clock()
         self.additional_tasks = []
+
+
         self.function = nothing
         self.done = False
         self.active_text_field = None
@@ -39,12 +42,13 @@ class engine(window.window_handler):
 
     def m_loop(self):
         while not self.done:
+            self.response = dict()
             self.mouse[0] = pygame.mouse.get_pos()
             self.mouse[1] = False
             #pygame.event.pump()#
             for event in pygame.event.get(): # User did something
                 if event.type == pygame.QUIT: # Closed from X
-                    self.done = True # Stop the Loop
+                    self.end()
                 elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
                     #print (event.pos)
                     if event.button == 1: #TODO make mousehandler later, seriosly
@@ -61,6 +65,8 @@ class engine(window.window_handler):
                     if not self.active_drag_obj == None:
                         self.active_drag_obj.dragged(event)
                 elif event.type == pygame.KEYDOWN:
+                    #on time
+                    #print("KEY")
                     if not self.active_text_field == None:
                         self.active_text_field.update(event)
                 elif event.type == pygame.VIDEORESIZE: #or event.type == pygame.FULLSCREEN:
@@ -70,9 +76,10 @@ class engine(window.window_handler):
                 elif event.type == function_call_event:
                     self.OTfunction_wrapper(event)
 
-            #self.update_display()
+            self.response["KEY"] = pygame.key.get_pressed()
 
             self.function()
+
             self.update_display()
 
             self.clock.tick(self.FPS)
@@ -85,27 +92,63 @@ class engine(window.window_handler):
 
 
     def STARTGAME(self):
-        self.GAME = game(self)
-        self.reset_GUI()
+        #self.GAME = game(self)
+        #self.reset_GUI()
         #self.GUI = self.GAME.game_gui()
+        #self.FromEngine = Queue()
+        #self.ToEngine = Queue()
+        #self.GameProcess = Process(target=startGame, args =(self.FromEngine, self.ToEngine) )
 
-        #pattern_conn, child_conn = Pipe()
-        #p = Process(target=self.GAME.game_loop, args =(child_conn,) )
+        parent_conn, child_conn = Pipe()
+        self.GameProcess = Process(target=startGame, args =(child_conn,) )
+
+
+        self.GameProcess.start()
+
+        self.GC = parent_conn
+
+        #print( "asd",self.GC.recv() )
         #p.start()
         #p.join()
         #self.function = self.drawGame
         #threading.Thread(target=self.GAME.game_loop).start()
         #threading.Thread(target=self.drawloop).start()
 
-        self.function = self.geamloap
+        self.function = self.drawprocess
 
-    def geamloap(self):
+    def drawprocess(self):
+        self.response["T"] = pygame.time.get_ticks()
+        if (self.GC.poll()):
+            msg = self.GC.recv()
+            self.EXPdrawGame( msg["GFX"] )
+        self.GC.send( self.response )
+
+        #print(msg)
+        #print( "to ",self.FromEngine.qsize() )
+        #print( "from ",self.ToEngine.qsize() )
+
+        #self.FromEngine.put( self.response )
+        #msg = self.ToEngine.get()
+        #msg = self.FromEngine.get_nowait()
+
+
+    #def geamloap(self):
         #self.GAME.game_step()
         #self.drawGame()
-        self.EXPdrawGame( self.GAME.EXPgame_step() )
+        #res = self.GAME.EXPgame_step( self.response )
+        #self.EXPdrawGame( res["GFX"] )
 
     def OTfunction_wrapper(self,e):
         e.func( *e.param )
+
+    def end(self):
+        self.done = True # Stop the Loop
+        self.response["END"] = True
+        try:
+            self.GameProcess.join()
+        except:
+            pass
+
 
 
 def start():

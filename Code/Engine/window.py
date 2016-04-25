@@ -11,6 +11,7 @@ class window_handler():
         self.h = SHEIGTH
         self.create_surfaces()
         self.gamepos = (10,10)
+        self.gamearea = pygame.Rect( (0, 0), ( GWIDTH, GHEIGTH) )
 
         self.GHandle = graphicalAssetHandler.graphicalAssetHandler()
         self.needs_resize = False
@@ -192,6 +193,6 @@ class window_handler():
         #pygame.draw.rect( self.MainWindow, (0,255,0), self.GAME.AREA.rect, 1 )
         #pygame.display.update(upd)
 
-        self.MainWindow.blit(self.surf_GAME, self.gamepos, self.GAME.AREA )
-        self.MainWindow.blit(self.surf_EFFECT, self.gamepos, self.GAME.AREA )
+        self.MainWindow.blit(self.surf_GAME, self.gamepos, self.gamearea )
+        self.MainWindow.blit(self.surf_EFFECT, self.gamepos, self.gamearea )
 

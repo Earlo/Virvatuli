@@ -11,100 +11,123 @@ from .game_constants import *
 from .. import constants
 #from ..Engine import events
 
+#not sure if so good solution, but, makes thing much simpler.
+from ..Engine import graphicalAssetHandler
+
+#from multiprocessing import Queue
+#import Queue
 
 ##example of a really boring game
 
+#def startGame( FromEngine,ToEngine ):
+#    GAME = game( FromEngine, ToEngine )
+#    GAME.game_loop()
+
 def startGame( conn ):
-    GAME = game()
+    GAME = game( conn )
+    GAME.game_loop()
+
 class game():
-    def __init__(self, PROGRAM,save = None):
-        self.PROGRAM = PROGRAM
+    #def __init__(self, FromEngine,ToEngine,save = None):
+    def __init__(self, ENGINECONNECTION,save = None):
+        #self.PROGRAM = PROGRAM
+        self.EC = ENGINECONNECTION
+
+        #self.FromEngine = FromEngine
+        #self.ToEngine = ToEngine
+
         self.done = False
         self.units = []
         self.ammo = []
         self.effects = []
 
+        self.keys = []
+
+        self.GHandle = graphicalAssetHandler.graphicalAssetHandler()
+
+
         #if save == None:
         self.start_game()
 
-
-    def EXPgame_step(self):
-        #last = pygame.time.get_ticks()
-        ret = dict()
-
-        self.AREA.update()
-        self.stage.update()
-        ret["BGR"] = dict()
-        ret["SPRITE"] = dict()
-        ret["PORTRAIT"] = dict()
-
-        ret["BGR"][self.AREA.sprite] =  [(0, self.AREA.scroll)]
-        if (not self.AREA.oldsprite == ""):
-            try:
-                ret["BGR"][self.AREA.oldsprite].append( (0, self.AREA.oldscroll) )
-            except KeyError:
-                ret["BGR"][self.AREA.oldsprite] =  [(0, self.AREA.oldscroll)]
-
-
-        for e in self.effects:
-            e.update()
-            try:
-                ret[e.imagetype][e.sprite].append( e.topleft )
-            except KeyError:
-                ret[e.imagetype][e.sprite] = [ e.topleft ]
-        for u in self.units:
-            u.update()
-            try:
-                ret[u.imagetype][u.sprite].append( u.topleft )
-            except KeyError:
-                ret[u.imagetype][u.sprite] = [ u.topleft ]
-        for a in self.ammo:
-            a.update()
-            try:
-                ret[a.imagetype][a.sprite].append( a.topleft )
-            except KeyError:
-                ret[a.imagetype][a.sprite] = [ a.topleft ]
-
-        return ret
-        #t = pygame.time.get_ticks()
-        #print( t - last )
-
-
-    def game_step(self):
-        #last = pygame.time.get_ticks()
-        ret = dict()
-
-        self.AREA.update()
-        self.stage.update()
-
-        ret[self.AREA.sprite] =  (0, self.GAME.AREA.scroll)
-        if (not self.AREA.oldsprite == ""):
-            ret[self.AREA.sprite] =  (0, self.GAME.AREA.scroll)
-            self.surf_GAME.blit( self.GAME.AREA.oldsurf(), (0, self.GAME.AREA.oldscroll) )
-
-
-        for e in self.effects:
-            e.update()
-        for u in self.units:
-            u.update()
-        for a in self.ammo:
-            a.update()
-
-        #t = pygame.time.get_ticks()
-        #print( t - last )
-
     def game_loop(self):
+        print("STARTING GAMELAOE")
         #last = 0
         #while not self.PROGRAM.done:
         while not self.done:
+
+            while (self.EC.poll() ):
+
+                self.message = self.EC.recv()
+                #print(self.EC.poll())
+                #print( self.message["T"] - pygame.time.get_ticks(),pygame.time.get_ticks() )
+                #print (self.message)
+
+                try:
+                    self.keys = self.message["KEY"]
+                except KeyError:
+                    pass
+                try:
+                    if self.message["END"]:
+                        self.done = True
+                except KeyError:
+                    pass
+            else:
+                self.message = {}
+
+            #try:
+            #    #self.message = self.FromEngine.get_nowait()
+            #    self.message = self.EC.get_nowait()
+            #    self.keys = self.message["KEY"]
+            #    if self.message["END"]:
+            #        self.done = True
+            #except KeyError:
+            #    pass
+            #except:
+            #    #Queue.Empty:
+            #    self.message = {}
+
+            ret = dict()
+
+            drawres = dict()
             self.AREA.update()
             self.stage.update()
+            drawres["BGR"] = dict()
+            drawres["SPRITE"] = dict()
+            drawres["PORTRAIT"] = dict()
+
+            drawres["BGR"][self.AREA.sprite] =  [(0, self.AREA.scroll)]
+            if (not self.AREA.oldsprite == ""):
+                try:
+                    drawres["BGR"][self.AREA.oldsprite].append( (0, self.AREA.oldscroll) )
+                except KeyError:
+                    drawres["BGR"][self.AREA.oldsprite] =  [(0, self.AREA.oldscroll)]
+
+
             for e in self.effects:
                 e.update()
+                try:
+                    drawres[e.imagetype][e.sprite].append( e.topleft )
+                except KeyError:
+                    drawres[e.imagetype][e.sprite] = [ e.topleft ]
             for u in self.units:
                 u.update()
+                try:
+                    drawres[u.imagetype][u.sprite].append( u.topleft )
+                except KeyError:
+                    drawres[u.imagetype][u.sprite] = [ u.topleft ]
             for a in self.ammo:
                 a.update()
+                try:
+                    drawres[a.imagetype][a.sprite].append( a.topleft )
+                except KeyError:
+                    drawres[a.imagetype][a.sprite] = [ a.topleft ]
+
+            ret["GFX"] = drawres
+            #print(ret)
+
+            #self.ToEngine.put( ret )
+
+            self.EC.send( ret )
             #t = pygame.time.get_ticks()
             #print( t - last )
             #last = t
@@ -135,6 +158,7 @@ class gameArea( pygame.Rect ):
 
         self.sprite = self.sprites[1]
 
+        #not sure if needed as a rect. investigate TODO
         super().__init__( (0, 0), (constants.GWIDTH, constants.GHEIGTH) )
 #        self.rect = self.surf().get_rect()
 
@@ -146,10 +170,10 @@ class gameArea( pygame.Rect ):
         self.scroll = +self.h-self.surf().get_height()
 
     def oldsurf(self):
-        return self.GAME.PROGRAM.GHandle["BGR"][self.oldsprite]
+        return self.GAME.GHandle["BGR"][self.oldsprite]
 
     def surf(self):
-        return self.GAME.PROGRAM.GHandle["BGR"][self.sprite]
+        return self.GAME.GHandle["BGR"][self.sprite]
 
     def update(self):
         t = pygame.time.get_ticks()
