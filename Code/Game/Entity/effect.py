@@ -5,12 +5,17 @@ class effect(entity.entity):
     imagetype = "SPRITE"
     def __init__(self, GAME, pos, time):
         super().__init__(GAME, pos, time)
-        self.frame = self.timeleft // self.timePerFrame
+        try:
+            self.frame = self.timeleft // self.timePerFrame
+        except AttributeError:
+            self.frame = 0
         self.done = False
 
 
     def update(self):
         super().update()
+
+    def animation(self):
         self.timeleft -= self.timeInterval
         f = self.timeleft // self.timePerFrame
         if not f == self.frame:
@@ -34,6 +39,7 @@ class explosion(effect):
 
     def update(self):
         super().update()
+        self.animation()
 
 class blasthit(effect):
     sprites = ["player_shot2",
@@ -45,7 +51,19 @@ class blasthit(effect):
 
     def update(self):
         super().update()
+        self.animation()
 
+
+class MagicTile(effect):
+    sprites = ["MagicTile0",
+             "MagicTile1"]
+    def __init__(self, GAME, pos):
+        super().__init__(GAME, pos, 0)
+
+    def update(self):
+        pass
+        #not sure if needed
+        #super().update()
 
 
 class energyTail(effect):

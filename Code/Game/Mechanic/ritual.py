@@ -156,16 +156,17 @@ class circle():
 
     def removeEffect(self):
         #pass
-
-        self.GAME.PROGRAM.surf_EFFECT.set_colorkey()
-        self.GAME.PROGRAM.surf_EFFECT.fill((0,0,0,0))
-        self.GAME.PROGRAM.surf_EFFECT.set_colorkey((0,0,0,0))
+        pass
+        #self.GAME.PROGRAM.surf_EFFECT.set_colorkey()
+        #self.GAME.PROGRAM.surf_EFFECT.fill((0,0,0,0))
+        #self.GAME.PROGRAM.surf_EFFECT.set_colorkey((0,0,0,0))
 
     def drawTiles(self):
         x0,y0 = self.grid.centerpiece.tile.pos
         for x,y in self.combos:
                 t = self.grid[x0 + x][y0 + y]
-                pygame.draw.rect(self.GAME.PROGRAM.surf_EFFECT, (0,255,255), t.rect, 1)
+                self.GAME.effects.append( effect.MagicTile( self.GAME, t.rect.center))
+                #pygame.draw.rect(self.GAME.PROGRAM.surf_EFFECT, (0,255,255), t.rect, 1)
 
     def drawCIRCLE(self, ctype):
         r = self.grid.res
@@ -173,9 +174,9 @@ class circle():
         for k in ctype:
             p = self.ctiles[k]
             points.append( (p[0]*r + r/2, p[1]*r + r/2) )
-        pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (20,20,200), points, 5)
-        pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (100,100,255), points, 3)
-        pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (200,200,255), points, 1)
+        #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (20,20,200), points, 5)
+        #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (100,100,255), points, 3)
+        #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (200,200,255), points, 1)
 
 
 

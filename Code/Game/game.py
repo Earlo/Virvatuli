@@ -17,13 +17,14 @@ from ..Engine import graphicalAssetHandler
 #from multiprocessing import Queue
 #import Queue
 
-##example of a really boring game
+# example of a really boring game
 
 #def startGame( FromEngine,ToEngine ):
 #    GAME = game( FromEngine, ToEngine )
 #    GAME.game_loop()
 
 def startGame( conn ):
+    pygame.init()
     GAME = game( conn )
     GAME.game_loop()
 
@@ -43,7 +44,7 @@ class game():
 
         self.keys = []
 
-        self.GHandle = graphicalAssetHandler.graphicalAssetHandler()
+        self.GHandle = graphicalAssetHandler.graphicalDict()
 
 
         #if save == None:
@@ -67,7 +68,9 @@ class game():
                 except KeyError:
                     pass
                 try:
+
                     if self.message["END"]:
+                        print( self.message["END"] )
                         self.done = True
                 except KeyError:
                     pass

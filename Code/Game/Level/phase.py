@@ -7,7 +7,7 @@ from ..Entity import pattern
 
 #ADD GENERIC
 class phase():
-    asd = 4
+    asd = 2
     def __init__(self,GAME):
         self.GAME = GAME
         self.events = []

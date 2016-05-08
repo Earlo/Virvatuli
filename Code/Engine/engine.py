@@ -117,7 +117,7 @@ class engine(window.window_handler):
         self.function = self.drawprocess
 
     def drawprocess(self):
-        self.response["T"] = pygame.time.get_ticks()
+        #self.response["T"] = pygame.time.get_ticks()
         if (self.GC.poll()):
             msg = self.GC.recv()
             self.EXPdrawGame( msg["GFX"] )
@@ -144,6 +144,7 @@ class engine(window.window_handler):
     def end(self):
         self.done = True # Stop the Loop
         self.response["END"] = True
+        self.GC.send( self.response )
         try:
             self.GameProcess.join()
         except:
