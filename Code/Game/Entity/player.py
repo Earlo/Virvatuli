@@ -43,6 +43,7 @@ class player(pattern.pattern):
                 self.owner.adhockeyrepeat = False
                 #print(self.owner, self.owner )
                 print( len( self.owner.GAME.units ), len( self.owner.GAME.ammo ), len( self.owner.GAME.effects ) )
+                print( self.owner.GAME.clock.get_fps() ) 
                 #print( len( self.owner.GAME.ammo ) )
 
             if not keys[K_c] and not keys[K_q]:

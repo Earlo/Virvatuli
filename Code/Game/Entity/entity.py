@@ -38,7 +38,7 @@ class entity( pygame.Rect ):
 
         self.changeSprite( 0 )
 
-        super().__init__( pos, self.surf().get_size() )
+        super().__init__( pos, self.gData()["rect"] )
 
         self.center = pos
         self.floatpos = pos
@@ -51,10 +51,9 @@ class entity( pygame.Rect ):
 
     def changeSprite(self, i):
         self.sprite = self.sprites[i]
-        self.CURRENTSURFACE = self.GAME.GHandle[self.imagetype][ self.sprite ]
 
-    def surf(self):
-        return self.CURRENTSURFACE
+    def gData(self):
+       return self.GAME.GHandle[self.imagetype][self.sprite]
 
     def drawableRect(self):
         return self.GAME.AREA.clip( self )
@@ -65,6 +64,7 @@ class entity( pygame.Rect ):
     def update(self):
         t = pygame.time.get_ticks()
         self.timeInterval = t - self.lastUpdated
+        #Why is this here? Change later, maybe
         self.change = self.speed * self.timeInterval
         self.lastUpdated = t
 

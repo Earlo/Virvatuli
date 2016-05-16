@@ -21,9 +21,12 @@ class grid(list):
             for b in range( self.y_range ):
                 self[a].append( tile (self, [a, b] ) )
                 # self.tiles[-1].draw(self.surf)
+                
+    def hash(self, point):
+        return point[0]//self.res,  point[0]//self.res
 
     def add(self, unit):
-        #pretty byt slow
+        #pretty but slow
 
         #ul = unit.topleft
         #br = unit.bottomright
@@ -35,26 +38,58 @@ class grid(list):
         #ugly but faster
 
         minx,maxx,miny,maxy = self.getTiles( unit.hitbox.topleft, unit.hitbox.bottomright)
+        
+        #ul, br = unit.hitbox.topleft, unit.hitbox.bottomright
+        #minx = ul[0] // self.res
+        #miny = ul[1] // self.res
+        #maxx = math.ceil( br[0] / self.res)
+        #maxy = math.ceil( br[1] / self.res)
 
+        #if minx < 0:
+        #    minx = 0
+        #elif minx > self.x_range:
+        #    minx = self.x_range
+
+        #if miny < 0:
+        #    miny = 0
+        #elif miny > self.y_range:
+        #    miny = self.y_range
+        #if maxx < 0:
+        #    maxx = 0
+        #elif maxx > self.x_range:
+        #    maxx = self.x_range
+
+        #if maxy < 0:
+        #    maxy = 0
+        #elif maxy > self.y_range :
+        #    maxy = self.y_range
+        
         #minx = unit.topleft[0] // self.res
         #miny = unit.topleft[1] // self.res
         #maxx = math.ceil( unit.bottomright[0] / self.res)
         #maxy = math.ceil( unit.bottomright[1] / self.res)
 
-        for a in range(minx,maxx):
-            for b in range(miny,maxy):
+        #min, max = self._hash(box.min), self._hash(box.max)
+        for a in range(minx,maxx+1):
+            for b in range(miny,maxy+1):
                 #t = self[a][b]
                 #unit.tiles.append( t )
                 #t.append(unit)
+                #try:
                 unit.tiles.append( self[a][b] )
                 self[a][b].append( unit )
+                #except IndexError:
+                #    print(a,b)
 
     def getTiles(self, ul, br):
-        minx = ul[0] // self.res
-        miny = ul[1] // self.res
-        maxx = math.ceil( br[0] / self.res)
-        maxy = math.ceil( br[1] / self.res)
-
+        #minx = ul[0] // self.res
+        #miny = ul[1] // self.res
+        #maxx = math.ceil( br[0] / self.res)
+        #maxy = math.ceil( br[1] / self.res)
+        minx, miny = self.hash(ul)
+        maxx, maxy = self.hash(br)
+        
+        
         if minx < 0:
             minx = 0
         elif minx > self.x_range:
@@ -63,17 +98,17 @@ class grid(list):
         if miny < 0:
             miny = 0
         elif miny > self.y_range:
-            miny = self.y_range
+            miny = self.y_range 
 
         if maxx < 0:
             maxx = 0
-        elif maxx > self.x_range:
-            maxx = self.x_range
+        elif maxx > self.x_range - 1:
+            maxx = self.x_range - 1
 
         if maxy < 0:
             maxy = 0
-        elif maxy > self.y_range :
-            maxy = self.y_range
+        elif maxy > self.y_range - 1:
+            maxy = self.y_range - 1
 
         return minx,maxx,miny,maxy
 

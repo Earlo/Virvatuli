@@ -4,7 +4,8 @@ from . import entity
 #clamp = lambda n, minn, maxn: max(min(maxn, n), minn)
 
 
-
+#DEBUG
+import pygame
 
 class unit(entity.entity):
     imagetype = "SPRITE"
@@ -15,16 +16,26 @@ class unit(entity.entity):
                       "TANGIBLE":False}
         self.tiles = []
 
-        self.rect = self.surf().get_rect()
-        self.hitbox = self.surf().get_bounding_rect()
+        self.hitbox = self.copy()
 
         self.addToGrid()
 
     def update(self):
+        s = pygame.time.get_ticks()
         super().update()
+        self.GAME.t[0] += pygame.time.get_ticks() - s
+        
+        s = pygame.time.get_ticks()
         self.pattern.iterate()
+        self.GAME.t[1] += pygame.time.get_ticks() - s
+
+        s = pygame.time.get_ticks()
         self.hitbox.center = self.center
+        self.GAME.t[2] += pygame.time.get_ticks() - s
+
+        s = pygame.time.get_ticks()
         self.addToGrid()
+        self.GAME.t[3] += pygame.time.get_ticks() - s
         if (self.deathConditions()):
             self.remove()
 
@@ -39,6 +50,7 @@ class unit(entity.entity):
 
     def collision(self): #really shit code, but will do
         #pass
+        #print("ASDS")
         for t in self.tiles:
             for i in t:
                 if i.FLAGS["TANGIBLE"]:

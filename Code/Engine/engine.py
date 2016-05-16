@@ -24,7 +24,7 @@ class engine(window.window_handler):
     def __init__(self):
         super().__init__() #initialize window handler
 
-        self.FPS = 100 #silky smooth 100 frames per second
+        self.FPS = 60 #silky smooth 100 frames per second
 
         self.mouse = [pygame.mouse.get_pos() , False ,  [0,0] , None ]
         self.clock = pygame.time.Clock()
@@ -144,11 +144,14 @@ class engine(window.window_handler):
     def end(self):
         self.done = True # Stop the Loop
         self.response["END"] = True
-        self.GC.send( self.response )
-        try:
-            self.GameProcess.join()
-        except:
-            pass
+        #self.GC.send( self.response )
+        #try:
+        #    print("JOINING")
+        #   self.GameProcess.join()
+        #    print("JOINED")
+        #except:
+        #   print("??? shoudl not happen, can't join threads")
+        #  pass
 
 
 
