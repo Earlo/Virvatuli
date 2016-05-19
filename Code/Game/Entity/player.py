@@ -31,6 +31,8 @@ class player(pattern.pattern):
         #print(self.floatpos, self.owner.center)
 
         if (not self.owner.DEAD):
+        
+            #TODO rething this
             if keys[K_z]:self.owner.weapon.update()
 
             if keys[K_c] and self.owner.adhockeyrepeat:

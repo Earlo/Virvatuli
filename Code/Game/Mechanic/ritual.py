@@ -19,6 +19,7 @@ class beaconMove(pattern.pattern):
             p = self.owner.tile.rect.center
 
             if (vector.dis(self.owner.center, p) < self.owner.change):
+                #print( p, self.owner.topleft )
                 self.owner.center = p
                 self.owner.onSpot = True
                 self.owner.tile.occupied = True
@@ -64,8 +65,10 @@ class beacon(unit.unit):
         super().addToGrid()
         #do something here to give player the advantage on border cases
         self.tile = self.tiles[0]
+        #print(self.tile.rect, len(self.tiles))
 
     def update(self):
+        #print(self)
         super().update()
 
     def remove(self):
@@ -89,6 +92,8 @@ class circle():
         self.ctiles = {}
         self.beacons =  []
         self.filled = []
+        self.tileEffects = []
+        self.drawPoints = []
 
     def start(self,cp,grid):
         x0,y0 = cp.tile.pos
@@ -146,17 +151,24 @@ class circle():
 
         self.removeEffect()
         self.ctiles = {}
+        
+        self.removeEffect()
+        
         self.filled = []
         for b in self.beacons:
             b.remove()
         self.beacons =[]
         self.grid.centerpiece.remove()
+        
         self.grid.centerpiece = None
         self.GAME.char.ACTIVECIRCLE = 0
 
     def removeEffect(self):
         #pass
-        pass
+        for e in self.tileEffects:
+            self.GAME.effects.remove(e)
+        self.tileEffects = []
+        self.drawPoints = []
         #self.GAME.PROGRAM.surf_EFFECT.set_colorkey()
         #self.GAME.PROGRAM.surf_EFFECT.fill((0,0,0,0))
         #self.GAME.PROGRAM.surf_EFFECT.set_colorkey((0,0,0,0))
@@ -164,8 +176,10 @@ class circle():
     def drawTiles(self):
         x0,y0 = self.grid.centerpiece.tile.pos
         for x,y in self.combos:
-                t = self.grid[x0 + x][y0 + y]
-                self.GAME.effects.append( effect.MagicTile( self.GAME, t.rect.center))
+                t = self.grid[x0 + x ][y0 + y ]
+                e = effect.MagicTile( self.GAME, t.rect.center)
+                self.tileEffects.append( e )
+                self.GAME.effects.append( e )
                 #pygame.draw.rect(self.GAME.PROGRAM.surf_EFFECT, (0,255,255), t.rect, 1)
 
     def drawCIRCLE(self, ctype):
@@ -174,6 +188,7 @@ class circle():
         for k in ctype:
             p = self.ctiles[k]
             points.append( (p[0]*r + r/2, p[1]*r + r/2) )
+        self.drawPoints.append( points )
         #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (20,20,200), points, 5)
         #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (100,100,255), points, 3)
         #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (200,200,255), points, 1)

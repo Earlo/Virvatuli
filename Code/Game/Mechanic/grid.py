@@ -23,7 +23,7 @@ class grid(list):
                 # self.tiles[-1].draw(self.surf)
                 
     def hash(self, point):
-        return point[0]//self.res,  point[0]//self.res
+        return point[0]//self.res,  point[1]//self.res
 
     def add(self, unit):
         #pretty but slow

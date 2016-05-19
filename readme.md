@@ -11,6 +11,7 @@ Controls:
 Use beacons to draw spirit circles in order to use spells
 
 
-current bugs:
-    The start menu doesn't show up, press around upper center parts of the windows. There is a button there that is
-    just invisible.
+
+
+This build is mostly a personal project where I see how things work with Python multiprocessing, may replace the main branch at some point.
+Most of the features ( is there any? ) work as intended now.

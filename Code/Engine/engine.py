@@ -98,7 +98,7 @@ class engine(window.window_handler):
         #self.FromEngine = Queue()
         #self.ToEngine = Queue()
         #self.GameProcess = Process(target=startGame, args =(self.FromEngine, self.ToEngine) )
-
+        self.GUI = []
         parent_conn, child_conn = Pipe()
         self.GameProcess = Process(target=startGame, args =(child_conn,) )
 

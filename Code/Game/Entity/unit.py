@@ -21,21 +21,21 @@ class unit(entity.entity):
         self.addToGrid()
 
     def update(self):
-        s = pygame.time.get_ticks()
+        #s = pygame.time.get_ticks()
         super().update()
-        self.GAME.t[0] += pygame.time.get_ticks() - s
+        #self.GAME.t[0] += pygame.time.get_ticks() - s
         
-        s = pygame.time.get_ticks()
+        #s = pygame.time.get_ticks()
         self.pattern.iterate()
-        self.GAME.t[1] += pygame.time.get_ticks() - s
+        #self.GAME.t[1] += pygame.time.get_ticks() - s
 
-        s = pygame.time.get_ticks()
+        #s = pygame.time.get_ticks()
         self.hitbox.center = self.center
-        self.GAME.t[2] += pygame.time.get_ticks() - s
+        #self.GAME.t[2] += pygame.time.get_ticks() - s
 
-        s = pygame.time.get_ticks()
+        #s = pygame.time.get_ticks()
         self.addToGrid()
-        self.GAME.t[3] += pygame.time.get_ticks() - s
+        #self.GAME.t[3] += pygame.time.get_ticks() - s
         if (self.deathConditions()):
             self.remove()
 

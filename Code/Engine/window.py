@@ -177,8 +177,14 @@ class window_handler():
         self.MainWindow.blit(self.surf_EFFECT, self.gamepos, self.GAME.AREA )
 
     def EXPdrawGame(self, drawD):
-
-        for key in ["BGR","SPRITE","PORTRAIT"]:
+        
+        for spr, poss  in drawD["BGR"].items():
+            s = self.GHandle["BGR"][spr]
+            for pos in poss:
+                self.surf_GAME.blit( s, pos )
+        for poly in drawD["POLY"]:
+            pygame.draw.polygon(self.surf_GAME, *poly)
+        for key in ["SPRITE","PORTRAIT"]:
             for spr, poss in drawD[key].items():
                 s = self.GHandle[key][spr]
                 for pos in poss:

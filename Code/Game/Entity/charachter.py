@@ -27,7 +27,8 @@ class charachter(unit.unit):
         #self.GAME.effects.extend(self.tail)
 
         #self.oldpos = collections.deque([self.pos()]*70, 70)
-        self.side = "ALLY"
+        self.FLAGS["ENEMY"]=False
+
         self.DEAD = False
 
         self.CIRCLE = ritual.circle()
@@ -127,4 +128,6 @@ class blaster():
         param = t[:]
         #os = [x * spread for x in vector.uvturn( random.randint(0,360) ) ]
         b = self.type( self.user, param[0], time  )
+        
+        #TODO change
         b.FLAGS["ENEMY"] = False

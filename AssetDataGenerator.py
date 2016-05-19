@@ -21,8 +21,8 @@ class graphicalDict(dict):
                 if file.endswith(".png"):
                     name = file.split(os.path.sep)[-1].split(".")[0]
                     i = pygame.image.load( os.path.join( fpath,"sprites", file) )
-                    i.set_colorkey(i.get_at((0, 0)))
-                    i = i.subsurface( i.get_bounding_rect() )
+                    #i.set_colorkey(i.get_at((0, 0)))
+                    #i = i.subsurface( i.get_bounding_rect() )
                     #i.set_colorkey( )
                     self["SPRITE"][name] = {
                         "rect":i.get_rect().size

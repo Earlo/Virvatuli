@@ -7,7 +7,8 @@ import json
 
 from .Level import stage
 from .Entity import charachter
-from .Mechanic import grid
+#from .Mechanic import grid
+from . import gameArea
 from .game_constants import *
 
 from .. import constants
@@ -63,7 +64,7 @@ class game():
         #while not self.PROGRAM.done:
         while not self.done:
             ret = dict()
-            self.t = [0,0,0,0]
+            #self.t = [0,0,0,0]
             #s = pygame.time.get_ticks()
             while (self.EC.poll() ):
                 self.message = self.EC.recv()
@@ -84,12 +85,15 @@ class game():
             #print ( "poll ", pygame.time.get_ticks() - s)
             
             #s = pygame.time.get_ticks()
+            
+            #TODO better solution for giving the things to draw
             drawres = dict()
             self.AREA.update()
             self.stage.update()
             drawres["BGR"] = dict()
             drawres["SPRITE"] = dict()
             drawres["PORTRAIT"] = dict()
+            drawres["POLY"] = []
 
             drawres["BGR"][self.AREA.sprite] =  [(0, self.AREA.scroll)]
             if (not self.AREA.oldsprite == ""):
@@ -115,6 +119,15 @@ class game():
                     drawres[a.imagetype][a.sprite].append( a.topleft )
                 except KeyError:
                     drawres[a.imagetype][a.sprite] = [ a.topleft ]
+            
+            #TODO FIX THIS ASDASDASDAS so ugly
+            #print
+            if (len(self.char.CIRCLE.drawPoints) > 0):
+                for points in  self.char.CIRCLE.drawPoints:
+                    #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (20,20,200), points, 5)
+                    drawres["POLY"].append( ( (20  ,20  ,200), points, 5 ) )
+                    drawres["POLY"].append( ( (100,100,255), points, 3 ) )
+                    drawres["POLY"].append( ( (200,200,255), points, 1 ) )
 
             #print ( "sim ", pygame.time.get_ticks() - s)
 
@@ -122,7 +135,7 @@ class game():
             #print(ret)
 
             #self.clock.tick(100)       
-            print(self.t)
+            #print(self.t)
             #self.ToEngine.put( ret )
             
             self.EC.send( ret )
@@ -134,7 +147,7 @@ class game():
 
         print("LoopdDOne")
     def start_game(self):
-        self.AREA = gameArea( self )
+        self.AREA = gameArea.gameArea( self )
 
         self.char = charachter.charachter(self)
         self.units.append(self.char)
@@ -145,73 +158,3 @@ class game():
         print("end")
         pass
 
-#class gameArea():
-class gameArea( pygame.Rect ):
-    sprites = [ "BGR_1",
-                "DEBUG",
-                "BGR_4"]
-    def __init__(self, GAME):
-        self.GAME = GAME
-        self.content = []
-
-        self.lastUpdated = pygame.time.get_ticks()
-        self.timeInterval = 0
-
-        self.sprite = self.sprites[1]
-
-        #not sure if needed as a rect. investigate TODO
-        super().__init__( (0, 0), (constants.GWIDTH, constants.GHEIGTH) )
-#        self.rect = self.surf().get_rect()
-
-        self.oldsprite = ""
-
-        self.grid = grid.grid( self.size, 32 )
-
-        #self.scroll = 0
-        self.scroll = +self.h-self.gData()["rect"][1]
-
-    #def oldsurf(self):
-    #    return self.GAME.GHandle["BGR"][self.oldsprite]
-
-    def gData(self):
-       return self.GAME.GHandle["BGR"][self.sprite]
-
-    def update(self):
-        t = pygame.time.get_ticks()
-        self.timeInterval = t - self.lastUpdated
-        self.lastUpdated = t
-        scrollAdd = self.GAME.stage.scrollspeed() * self.timeInterval
-        if (self.scroll > 0):
-            self.oldscroll = self.scroll
-            self.scroll = -self.gData()["rect"][1]
-            self.oldsprite = self.sprite
-            #self.surf = self.nextsurf
-        elif not self.oldsprite == "":
-            if self.oldscroll > self.gData()["rect"][1]:
-                self.oldsprite = ""
-            else:
-                pos = [0, self.scroll]
-                pos[1] += self.oldscroll
-            self.oldscroll += scrollAdd
-        self.scroll += scrollAdd
-
-    #def checkBorders(self,unit,dx,dy):
-    #    if self.checkX( unit, dx):
-    #        dx = 0
-    #    if self.checkY( unit, dy):
-    #        dy = 0
-    #    return dx, dy
-
-    #def checkX(self, unit, dx):
-    #    return ( (unit.x - unit.rect.w/2 + dx < 0) or (unit.x + unit.rect.w/2 + dx > self.rect.w) )
-
-    #def checkY(self, unit, dy):
-    #    return ( (unit.y - unit.rect.h/2 + dy < 0) or (unit.y + unit.rect.h/2 + dy > self.rect.h) )
-
-    #def isOut(self, unit, dy, dx):
-    #    return self.checkX(unit, dx) or self.checkY(unit, dy)
-
-
-
-#def XtoYinZ(x,y,z,step):
-#    return(x + y - (step - z) )

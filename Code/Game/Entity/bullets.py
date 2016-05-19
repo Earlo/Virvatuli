@@ -68,7 +68,6 @@ class blade(bullet):
         self.damage = 10
         self.hasHit = False
         self.user = user
-        self.side = user.side
         user.GAME.ammo.append(self)
         self.speed = 0.5
         self.pattern = goStraight( self, vec )
