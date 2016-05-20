@@ -62,10 +62,15 @@ class beacon(unit.unit):
         pass
 
     def addToGrid(self):
+        # could think of something so that the beacons become more passive once they find their spot
         super().addToGrid()
         #do something here to give player the advantage on border cases
+        #self.GAME.char.CIRCLE.
         self.tile = self.tiles[0]
-        #print(self.tile.rect, len(self.tiles))
+
+        for t in self.tiles:
+            if t.pos in self.GAME.char.CIRCLE.ctiles.values():
+                self.tile = t
 
     def update(self):
         #print(self)
