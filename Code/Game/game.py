@@ -1,5 +1,8 @@
 import random
 
+
+from multiprocessing import Pool, TimeoutError
+
 import pygame
 #from pygame.locals import *
 
@@ -42,7 +45,7 @@ class game():
 
         #self.FromEngine = FromEngine
         #self.ToEngine = ToEngine
-
+        self.pool = Pool(processes=4) # start 4 worker processes 
         self.done = False
         self.units = []
         self.ammo = []
@@ -109,12 +112,14 @@ class game():
                     drawres[e.imagetype][e.sprite].append( e.topleft )
                 except KeyError:
                     drawres[e.imagetype][e.sprite] = [ e.topleft ]
+
             for u in self.units:
                 u.update()
                 try:
                     drawres[u.imagetype][u.sprite].append( u.topleft )
                 except KeyError:
                     drawres[u.imagetype][u.sprite] = [ u.topleft ]
+            
             for a in self.ammo:
                 a.update()
                 try:

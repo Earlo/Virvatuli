@@ -231,7 +231,6 @@ class boss0(pattern):
 
 
     def sp1(self):
-        #self.owner.GAME.effects.append( effect.enemy1_portrait( self.owner.GAME, [100,100], pygame.time.get_ticks() ))
         self.owner.sprite = self.owner.sprites[4]
         self.point = [[100,185],[290,100],[480,185]]
         self.cooldown = 25

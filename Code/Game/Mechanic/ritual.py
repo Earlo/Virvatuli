@@ -1,5 +1,3 @@
-import pygame
-
 
 from .. import vector
 from ..Entity import unit
@@ -185,7 +183,6 @@ class circle():
                 e = effect.MagicTile( self.GAME, t.rect.center)
                 self.tileEffects.append( e )
                 self.GAME.effects.append( e )
-                #pygame.draw.rect(self.GAME.PROGRAM.surf_EFFECT, (0,255,255), t.rect, 1)
 
     def drawCIRCLE(self, ctype):
         r = self.grid.res
@@ -194,9 +191,6 @@ class circle():
             p = self.ctiles[k]
             points.append( (p[0]*r + r/2, p[1]*r + r/2) )
         self.drawPoints.append( points )
-        #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (20,20,200), points, 5)
-        #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (100,100,255), points, 3)
-        #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (200,200,255), points, 1)
 
 
 

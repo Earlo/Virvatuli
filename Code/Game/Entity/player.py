@@ -1,5 +1,5 @@
 
-#import pygame
+#??;:d
 from pygame.locals import *
 
 from . import pattern
