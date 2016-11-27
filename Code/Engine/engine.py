@@ -102,7 +102,6 @@ class engine(window.window_handler):
         parent_conn, child_conn = Pipe()
         self.GameProcess = Process(target=startGame, args =(child_conn,) )
 
-
         self.GameProcess.start()
 
         self.GC = parent_conn

@@ -67,22 +67,24 @@ class game():
             #self.t = [0,0,0,0]
             #s = pygame.time.get_ticks()
             while (self.EC.poll() ):
-                self.message = self.EC.recv()
-                #print(self.EC.poll())
-                #print( self.message["T"] - pygame.time.get_ticks(),pygame.time.get_ticks() )
-                try:
-                    self.keys = self.message["KEY"]
-                except KeyError:
-                    pass
-                try:
-                    if (self.message['END']):
-                        print( "THEGAME,",self.message["END"] )
-                        self.done = True
-                        ret["END"] = True
-                        break
-                except KeyError:
-                    pass
-            #print ( "poll ", pygame.time.get_ticks() - s)
+            	self.message = self.EC.recv()
+            #print( self.EC )
+
+            #print(self.EC.poll())
+            #print( self.message["T"] - pygame.time.get_ticks(),pygame.time.get_ticks() )
+            try:
+                self.keys = self.message["KEY"]
+            except KeyError:
+                pass
+            try:
+                if (self.message['END']):
+                    print( "THEGAME,",self.message["END"] )
+                    self.done = True
+                    ret["END"] = True
+                    break
+            except KeyError:
+                pass
+        #print ( "poll ", pygame.time.get_ticks() - s)
             
             #s = pygame.time.get_ticks()
             
@@ -125,16 +127,16 @@ class game():
             if (len(self.char.CIRCLE.drawPoints) > 0):
                 for points in  self.char.CIRCLE.drawPoints:
                     #pygame.draw.polygon(self.GAME.PROGRAM.surf_EFFECT, (20,20,200), points, 5)
-                    drawres["POLY"].append( ( (20  ,20  ,200), points, 5 ) )
+                    drawres["POLY"].append( ( (20 ,20 ,200), points, 5 ) )
                     drawres["POLY"].append( ( (100,100,255), points, 3 ) )
                     drawres["POLY"].append( ( (200,200,255), points, 1 ) )
 
             #print ( "sim ", pygame.time.get_ticks() - s)
 
             ret["GFX"] = drawres
-            #print(ret)
+            #print(ret)https://github.com/Earlo/Virvatuli.git
 
-            #self.clock.tick(100)       
+            self.clock.tick(60)
             #print(self.t)
             #self.ToEngine.put( ret )
             
@@ -143,7 +145,9 @@ class game():
             #t = pygame.time.get_ticks()
             #print( t - last )
             #last = t
-        self.EC.join()
+        
+        #???
+        #self.EC.join()
 
         print("LoopdDOne")
     def start_game(self):

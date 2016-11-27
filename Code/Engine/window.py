@@ -1,3 +1,5 @@
+#testimg
+import functools
 
 import pygame
 
@@ -153,6 +155,8 @@ class window_handler():
         if (not self.GAME.AREA.oldsprite == ""):
             self.surf_GAME.blit( self.GAME.AREA.oldsurf(), (0, self.GAME.AREA.oldscroll) )
 
+
+        """
         for e in self.GAME.effects:
             #print( e.CURRENTSURFACE._pixels_address )
             #self.surf_GAME.blit( e.surf(), e )
@@ -165,7 +169,7 @@ class window_handler():
         for a in self.GAME.ammo:
             self.surf_GAME.blit( a.CURRENTSURFACE, a )
             #pygame.draw.rect(self.surf_GAME, (255,125,125), a.hitbox, 1)
-
+        """
 
         #pygame.draw.circle( self.surf_EFFECT, (0,255,0), [int(i) for i in self.GAME.char.upleftPos()] , 3 )
         #pygame.draw.circle( self.surf_EFFECT, (0,255,0), [int(i) for i in self.GAME.char.botrightPos()] , 3 )
@@ -187,11 +191,24 @@ class window_handler():
         for key in ["SPRITE","PORTRAIT"]:
             for spr, poss in drawD[key].items():
                 s = self.GHandle[key][spr]
-                for pos in poss:
-                    self.surf_GAME.blit( s, pos )
+                #for pos in poss:
+                #    self.surf_GAME.blit( s, pos )
+                [ self.surf_GAME.blit( s, pos ) for pos in poss]
 
+        """
+        for spr, poss in drawD["BGR"].items():
+            s = self.GHandle["BGR"][spr]
+            map(lambda poss: self.surf_GAME.blit( s, pos ), poss)
 
+        #for poly in drawD["POLY"]:
+        #    pygame.draw.polygon(self.surf_GAME, *poly)
+        map(lambda poly: pygame.draw.polygon(self.surf_GAME, *poly), drawD["POLY"])
 
+        for key in ["SPRITE","PORTRAIT"]:
+            for spr, poss in drawD[key].items():
+                s = self.GHandle[key][spr]
+                map(lambda poss: self.surf_GAME.blit( s, pos ), poss)
+        """
 
         #pygame.draw.circle( self.surf_EFFECT, (0,255,0), [int(i) for i in self.GAME.char.upleftPos()] , 3 )
         #pygame.draw.circle( self.surf_EFFECT, (0,255,0), [int(i) for i in self.GAME.char.botrightPos()] , 3 )
