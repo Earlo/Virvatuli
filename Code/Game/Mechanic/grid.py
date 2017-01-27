@@ -14,12 +14,14 @@ class grid(list):
         self.x_range = (size[0] // res)
         self.y_range = (size[1] // res)
 
-        self.centerpiece = None
+        self.lineLookup = []
 
+
+        self.centerpiece = None
         for a in range( self.x_range ):
-            self.append([])
+            self.lineLookup.append( a*self.x_range )
             for b in range( self.y_range ):
-                self[a].append( tile (self, [a, b] ) )
+                self.append( tile (self, (a, b) ) )
                 # self.tiles[-1].draw(self.surf)
                 
     def hash(self, point):
@@ -70,14 +72,17 @@ class grid(list):
         #maxy = math.ceil( unit.bottomright[1] / self.res)
 
         #min, max = self._hash(box.min), self._hash(box.max)
+        #print("Moi")
         for a in range(minx,maxx+1):
+            l = self.lineLookup[a]
             for b in range(miny,maxy+1):
+                index = l+b
                 #t = self[a][b]
                 #unit.tiles.append( t )
                 #t.append(unit)
                 #try:
-                unit.tiles.append( self[a][b] )
-                self[a][b].append( unit )
+                unit.tiles.append( self[index] )
+                self[index].append( unit )
                 #except IndexError:
                 #    print(a,b)
 

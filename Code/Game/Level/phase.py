@@ -7,7 +7,7 @@ from ..Entity import pattern
 
 #ADD GENERIC
 class phase():
-    asd = 25
+    asd = 3
     def __init__(self,GAME):
         self.GAME = GAME
         self.events = []
@@ -38,9 +38,12 @@ class phase00(phase):
         #r = 50 + time % 150 * (time % 2 - 1)
         #r = 200
         #pass
+        
+        #pass
         r = random.randint(50,250)
         e = enemy.enemy0(self.GAME, [-128, 100+r], time, pattern.movePattern0)
         self.GAME.units.append(e)
+        #pass
 
         #self.GAME.units.append( enemy.boss0(self.GAME, [-128, 300], time) )
         #pass
